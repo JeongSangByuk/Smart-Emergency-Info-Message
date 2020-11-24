@@ -119,7 +119,7 @@ public class Dialogue_select_location extends AppCompatActivity {
             public void onClick(View view, int position) {
                 String str = mArrayList.get(position).toString();
 
-                Toast.makeText(getApplicationContext(), "position : " + position + "/ String : " + str, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "position : " + position + "/ String : " + str, Toast.LENGTH_LONG).show();
 //                set_list(mArrayList,"0");
 
 

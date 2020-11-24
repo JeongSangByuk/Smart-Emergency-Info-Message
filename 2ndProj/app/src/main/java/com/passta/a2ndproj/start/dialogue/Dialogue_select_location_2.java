@@ -95,7 +95,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
             public void onClick(View view, int position) {
                 String str = mArrayList.get(position).toString();
 
-                Toast.makeText(getApplicationContext(), "position : " + position + "/ String : " + str, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "position : " + position + "/ String : " + str, Toast.LENGTH_LONG).show();
                 Dialogue_select_location dsl = (Dialogue_select_location)Dialogue_select_location.activity;
 
 

@@ -377,6 +377,20 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     result = response.body().string();
 
+                    int temp = 0;
+                    boolean hasSameLocation_si = false;
+
+                    // 이미 똑같은 시 의 문자 정보가 저장돼 있는 경우에는 ~~시 전체 의 문자를 한번더 넣어주지 않기 위해 검사
+                    for (int i=0;i<userList.size();i++){
+                        if(location_si.equals(userList.get(i).getLocation_si())){
+                            temp++;
+                            if(temp>1){
+                                hasSameLocation_si = true;
+                                break;
+                            }
+                        }
+                    }
+
                     JSONObject jObject = new JSONObject(result);
                     jsonArray = (JSONArray) jObject.get("msg");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -384,10 +398,16 @@ public class MainActivity extends AppCompatActivity {
 
                         ArrayList<String> tempDay = new ArrayList<>();
                         tempDay = returnDayString(obj.getString("msg_sendingTime"));
-                        msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content"),
+
+                        // 이미 똑같은 ~~시 문자가 저장돼있는경우 ~~시 전체의 문자의 경우는 continue 시켜서 add안함.
+                        if(hasSameLocation_si){
+                            if(obj.getString("msg_sendingArea").split(" ")[1].equals("전체"))
+                                continue;
+                        }
+
+                        msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content").trim(),
                                 obj.getString("msg_sendingArea"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"))));
-                        Log.d("test",tempDay.get(0) + "|" + tempDay.get(1));
                     }
 
                     //전체 데이터 시간순 배열

@@ -189,11 +189,18 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
                 } else if (tag_editing.getText().toString() != null && location.getText() != null) {
 
                     Boolean isOverlap = false;
-                    Log.d("test",Integer.toString(userList.size()));
+
+                    //tag과 location 중복 체크
                     for(int i=0;i<userList.size(); i++){
-                        String temp = userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu();
-                        if(temp.equals(location.getText())){
+                        String tempLocation = userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu();
+                        String tempTag = userList.get(i).getTag();
+
+                        if(tempLocation.equals(location.getText().toString())){
                             Toast.makeText(this, "이미 수신 지역으로 등록 돼 있는 지역입니다.", Toast.LENGTH_SHORT).show();
+                            isOverlap = true;
+                            return;
+                        } else if(tempTag.equals(tag_editing.getText().toString())){
+                            Toast.makeText(this, "이미 같은 이름의 장소가 등록 돼 있습니다.", Toast.LENGTH_SHORT).show();
                             isOverlap = true;
                             return;
                         }
