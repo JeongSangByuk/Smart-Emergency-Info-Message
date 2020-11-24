@@ -36,6 +36,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
     private int numberOfColumns;
     private static final String TAG = "Dialogue_select_location_2";
     private String nowType;
+    private int position_si;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +44,11 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
         setContentView(R.layout.dialogue_select_location_2);
 
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position",0);
+        position_si = intent.getIntExtra("position",0);
         nowType = intent.getStringExtra("type");
 
         InitializeView();
-        initialize_recyclerview(1, position);
+        initialize_recyclerview(1, position_si);
 
 
     }
@@ -69,7 +70,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
         }
 
     }
-    public void initialize_recyclerview(int numberOfColumns, int position)
+    public void initialize_recyclerview(int numberOfColumns, int position_si)
     {
         numberOfColumns = numberOfColumns;
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, numberOfColumns);
@@ -78,7 +79,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
 //        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
 
-        String filename = "gu_"+Integer.toString(position);
+        String filename = "gu_"+Integer.toString(position_si);
         set_list(mArrayList,filename);
 
 
@@ -100,7 +101,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
 
                 Log.d("모은", "addOnItemTouchListener");
                 Intent intent = new Intent(getApplicationContext(),Dialogue_select_location.class);
-                intent.putExtra("position", position);
+                intent.putExtra("position", position_si);
                 intent.putExtra("location_gu", str);
                 setResult(RESULT_OK, intent);
 

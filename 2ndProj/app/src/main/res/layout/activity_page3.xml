@@ -81,8 +81,7 @@
                 android:layout_height="wrap_content"
 
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="3dp"
-                android:fontFamily="@font/nanumsquareeb"
+                android:layout_marginRight="3dp" android:fontFamily="@font/nanumsquareeb"
                 android:text="코로나 동선  ㅤㅤㅤ :" />
 
             <!--base/indicator/track/-->

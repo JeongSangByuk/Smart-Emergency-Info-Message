@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private final static String BASE_URL ="http://ensharpappserver.paas-ta.org:3000/" ;//내 서버
+    private final static String BASE_URL ="http://ensharpappserver.paas-ta.org" ;//내 서버
     private static Retrofit retrofit = null;
 
     private RetrofitClient() {

@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface ServiceApi {
 
-    @POST("request_msg_to_location")
+    @POST("/request_msg_to_location")
     Call<ResponseBody> selectMsg(@Query("sido") String sido, @Query("gusi") String gusi, @Query("limit") int limit);
 
 }

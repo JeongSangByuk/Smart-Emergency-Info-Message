@@ -21,8 +21,8 @@ public class Msg_VO {
     private double totalMsgPoint;
     private MainActivity mainActivity;
 
-
     public Msg_VO(int id, String day, String time, String msgText, String senderLocation, MainActivity mainActivity, MsgCategoryPoint_VO msgCategoryPoint) {
+
         this.id = id;
         this.day = day;
         this.time = time;

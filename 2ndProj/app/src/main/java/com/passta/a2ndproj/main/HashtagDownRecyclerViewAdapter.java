@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.passta.a2ndproj.data.UserSettingDTO;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -57,11 +59,11 @@ public class HashtagDownRecyclerViewAdapter extends RecyclerView.Adapter<Hashtag
 
         // 클릭 돼 있는 경우
         if (mainActivity.hashtagDownDataList.get(position).isClicked()) {
-            Typeface typeface = context.getResources().getFont(R.font.nanumsquareeb);
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.nanumsquareb);
             viewHolder.name.setTextColor(Color.parseColor(context.getString(R.color.twitterBlue)));
             viewHolder.name.setTypeface(typeface);
         } else {
-            Typeface typeface = context.getResources().getFont(R.font.nanumsquarer);
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.nanumsquarer);
             viewHolder.name.setTextColor(Color.parseColor(context.getString(R.color.black)));
             viewHolder.name.setTypeface(typeface);
         }
@@ -132,10 +134,8 @@ public class HashtagDownRecyclerViewAdapter extends RecyclerView.Adapter<Hashtag
         public void deleteInterestLevelItem(String hashtagText) {
 
             int level = returnLevel(hashtagText);
-
             setUserSettingInterestLevel(level,false);
             updateHashtagSetting();
-
             //관심도에 따른 삭제
             for (int i = 0; i < mainActivity.oneDayMsgDataList.size(); i++) {
 
@@ -320,6 +320,5 @@ public class HashtagDownRecyclerViewAdapter extends RecyclerView.Adapter<Hashtag
             return null;
         }
     }
-
 
 }

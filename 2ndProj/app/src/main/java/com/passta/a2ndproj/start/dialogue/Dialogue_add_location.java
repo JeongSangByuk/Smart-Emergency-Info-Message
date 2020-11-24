@@ -11,7 +11,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.Image;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.ims.ImsMmTelManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -27,12 +30,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
+import com.passta.a2ndproj.data.AppDatabase;
+import com.passta.a2ndproj.data.UserListDAO;
+import com.passta.a2ndproj.data.UserListDTO;
 import com.passta.a2ndproj.start.activity.Page2Activity;
 import com.passta.a2ndproj.start.adapter.AdapterImageLocation;
 import com.passta.a2ndproj.start.adapter.Adapter_location;
@@ -53,6 +60,7 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
     private ArrayList<Integer> locationList;
     private LinearLayout spaceView;
     private AdapterImageLocation adapterImageLocation;
+    public List<UserListDTO> userList;
 
     private LocationManager locationManager;
     private static final String TAG = "dialogue_add_location";
@@ -66,8 +74,10 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         nowType = intent.getStringExtra("type");
 
+        AppDatabase db = AppDatabase.getInstance(this);
+        new UserDatabaseAsyncTask(db.userListDAO()).execute();
+
         InitializeView();
-        SetListener();
     }
 
     @Override
@@ -177,14 +187,26 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
                 } else if (adapterImageLocation.selectedPosition == -1) {
                     Toast.makeText(this, "이미지 선택이 필요합니다", Toast.LENGTH_SHORT).show();
                 } else if (tag_editing.getText().toString() != null && location.getText() != null) {
-                    if (nowType.equals("start")) {
+
+                    Boolean isOverlap = false;
+                    Log.d("test",Integer.toString(userList.size()));
+                    for(int i=0;i<userList.size(); i++){
+                        String temp = userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu();
+                        if(temp.equals(location.getText())){
+                            Toast.makeText(this, "이미 수신 지역으로 등록 돼 있는 지역입니다.", Toast.LENGTH_SHORT).show();
+                            isOverlap = true;
+                            return;
+                        }
+                    }
+
+                    if (nowType.equals("start") && !isOverlap) {
                         intent = new Intent(getApplicationContext(), Page2Activity.class);
                         intent.putExtra("tag", tag_editing.getText().toString());
                         intent.putExtra("location", location.getText().toString());
                         intent.putExtra("imgNumber", locationList.get(adapterImageLocation.selectedPosition));
                         setResult(RESULT_OK, intent);
                         finish();
-                    } else if(nowType.equals("main")){
+                    } else if(nowType.equals("main") && !isOverlap){
                         intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("tag", tag_editing.getText().toString());
                         intent.putExtra("location", location.getText().toString());
@@ -310,6 +332,28 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
                 outRect.right = verticalSpaceHeight;
             }
+        }
+    }
+
+    public class UserDatabaseAsyncTask extends AsyncTask<UserListDTO, Void, Void> {
+
+        private UserListDAO userListDAO;
+
+        UserDatabaseAsyncTask(UserListDAO userListDAO) {
+            this.userListDAO = userListDAO;
+        }
+
+        @Override
+        protected Void doInBackground(UserListDTO... userListDTOS) {
+            userList = userListDAO.loadUserList();
+            return null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            SetListener();
         }
     }
 

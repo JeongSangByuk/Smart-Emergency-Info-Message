@@ -14,6 +14,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.passta.a2ndproj.data.AppDatabase;
 import com.passta.a2ndproj.data.FilterDAO;
 import com.passta.a2ndproj.data.FilterDTO;
@@ -29,17 +33,29 @@ import com.passta.a2ndproj.main.Msg_VO;
 import com.passta.a2ndproj.main.OneDayMsgRecyclerViewAdapter;
 import com.passta.a2ndproj.main.OneDayMsg_VO;
 import com.passta.a2ndproj.main.Seekbar;
+import com.passta.a2ndproj.network.RetrofitClient;
+import com.passta.a2ndproj.network.ServiceApi;
 import com.passta.a2ndproj.start.activity.Page2Activity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public String insertedLocationName;
     public String insertedLocation_si;
     public String insertedLocation_gu;
+    private ServiceApi serviceApi;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -88,10 +105,29 @@ public class MainActivity extends AppCompatActivity {
         filterList = new ArrayList<>();
         userList = new ArrayList<>();
 
+        //Firebase에 토큰 등록시
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,
+                new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        String newToken = instanceIdResult.getToken();
+                        Log.e("new Token : ", newToken);
+                        subcribeTopic("testTopic");//topic 에 등록
+                    }
+                });
+
+        //이미 등록된 경우
+        String savedToken = FirebaseInstanceId.getInstance().getId();
+        Log.e("savedToken", savedToken);
+
         //db생성
         db = AppDatabase.getInstance(this);
         new FilterDatabaseAsyncTask(db.filterDAO()).execute();
 
+    }
+    public void subcribeTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        Log.e("Main ", "subcribe Topic : " + topic);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -135,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
             int size = userList.size() - 1;
             hashtagUpDataList.add(new Hashtag_VO(userList.get(size).tag, userList.get(size).img_number, true));
             hashtagUpRecyclerViewAdapter.notifyDataSetChanged();
+
+            //위치에 따른 msg 추가
+            getMsgData(insertedLocation_si,insertedLocation_gu);
         }
 
     }
@@ -176,24 +215,24 @@ public class MainActivity extends AppCompatActivity {
                 " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
         msgDataList.add(new Msg_VO(12, "2020년 11월 6일", "11:31:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
                 " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-        msgDataList.add(new Msg_VO(3, "2020년 11월 5일", "11:30:23", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
-                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-        msgDataList.add(new Msg_VO(4, "2020년 11월 5일", "11:39:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-        msgDataList.add(new Msg_VO(5, "2020년 11월 5일", "03:39:10", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
-                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-        msgDataList.add(new Msg_VO(6, "2020년 11월 4일", "21:30:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-        msgDataList.add(new Msg_VO(7, "2020년 11월 4일", "11:29:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-        msgDataList.add(new Msg_VO(8, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-        msgDataList.add(new Msg_VO(9, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-        msgDataList.add(new Msg_VO(10, "2020년 11월 3일", "21:30:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-        msgDataList.add(new Msg_VO(11, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
+//        msgDataList.add(new Msg_VO(3, "2020년 11월 5일", "11:30:23", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
+//                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
+//        msgDataList.add(new Msg_VO(4, "2020년 11월 5일", "11:39:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
+//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
+//        msgDataList.add(new Msg_VO(5, "2020년 11월 5일", "03:39:10", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
+//                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
+//        msgDataList.add(new Msg_VO(6, "2020년 11월 4일", "21:30:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
+//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
+//        msgDataList.add(new Msg_VO(7, "2020년 11월 4일", "11:29:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
+//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
+//        msgDataList.add(new Msg_VO(8, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
+//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
+//        msgDataList.add(new Msg_VO(9, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
+//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
+//        msgDataList.add(new Msg_VO(10, "2020년 11월 3일", "21:30:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
+//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
+//        msgDataList.add(new Msg_VO(11, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
+//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
 
         //필터 데이터 분류
         classifyMsgData(true);
@@ -267,6 +306,20 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    public ArrayList<String> returnDayString(String sendingTime){
+        String dayString = sendingTime.split(" ")[0];
+        String timeString = sendingTime.split(" ")[1];
+
+        dayString = dayString.substring(0,dayString.indexOf("/")) + "년 " +
+                dayString.substring(dayString.indexOf("/") + 1,dayString.lastIndexOf("/")) + "월 " + dayString.substring(dayString.lastIndexOf("/") + 1) + "일";
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add(dayString);
+        list.add(timeString);
+        return list;
+    }
+
+
     //날짜순 정렬하는 메소드
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<OneDayMsg_VO> sortByDay(ArrayList<OneDayMsg_VO> oneDayMsgDataList) {
@@ -307,6 +360,64 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return oneDayMsgDataList;
+    }
+
+
+    public void getMsgData(String location_si,String location_gu) {
+
+        serviceApi = RetrofitClient.getClient().create(ServiceApi.class);//내 서버 연결
+
+        Call<ResponseBody> selectMsg = serviceApi.selectMsg(location_si, location_gu, 10);
+        selectMsg.enqueue(new Callback<ResponseBody>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String result = null;
+                JSONArray jsonArray = null;
+                try {
+                    result = response.body().string();
+
+                    JSONObject jObject = new JSONObject(result);
+                    jsonArray = (JSONArray) jObject.get("msg");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                        ArrayList<String> tempDay = new ArrayList<>();
+                        tempDay = returnDayString(obj.getString("msg_sendingTime"));
+                        msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content"),
+                                obj.getString("msg_sendingArea"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
+                                obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"))));
+                        Log.d("test",tempDay.get(0) + "|" + tempDay.get(1));
+                    }
+
+                    //전체 데이터 시간순 배열
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+                    msgDataList.sort(new Comparator<Msg_VO>() {
+                        @Override
+                        public int compare(Msg_VO t, Msg_VO t1) {
+                            try {
+                                return dateFormat.parse(t1.getDay() + " " + t1.getTime()).compareTo(dateFormat.parse(t.getDay() + " " + t1.getTime()));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            return 0;
+                        }
+                    });
+
+                    //필터 데이터 분류
+                    classifyMsgData(true);
+                    createOneDayMsgDataList();
+                    oneDayMsgRecyclerViewAdapter.notifyDataSetChanged();
+
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });
     }
 
     // 데이터 AsyncvTask
