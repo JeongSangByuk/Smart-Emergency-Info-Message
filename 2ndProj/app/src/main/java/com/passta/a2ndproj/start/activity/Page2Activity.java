@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,7 +88,7 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
             location_si = location.split(" ")[0];
             location_gu = location.split(" ")[1];
 
-            UserListDTO lst = new UserListDTO(tag, location_si, location_gu,imgNumber);
+            UserListDTO lst = new UserListDTO(tag, location_si, location_gu,imgNumber,true);
             AppDatabase db = AppDatabase.getInstance(this);
             new DatabaseInsertAsyncTask(db.userListDAO(), lst).execute();
             list.add(lst);
@@ -142,6 +143,10 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
+                if(list.size()==0){
+                    Toast.makeText(this, "수신 지역은 반드시 한개 이상 저장 돼 있어야 합니다.", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 Intent intent = new Intent(getApplicationContext(), Page3Activity.class);
                 startActivity(intent);
                 break;
@@ -166,16 +171,16 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
         @Override
         protected Void doInBackground(UserListDTO... userListDTOS) {
             list = userListDAO.loadUserList();
-            if (list.size() == 0) {
-                Log.i("모은 데이터베이스", "null");
-                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구",R.drawable.cafe1));
-            }
+//            if (list.size() == 0) {
+//                Log.i("모은 데이터베이스", "null");
+//                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구",R.drawable.cafe1,true));
+//            }
             list = userListDAO.loadUserList();
-            for (int i = 0; i < list.size(); i++) {
-                Log.i("모은 데이터베이스", "nullx");
-                Log.i("모은 데이터베이스", list.get(i).getTag());
-
-            }
+//            for (int i = 0; i < list.size(); i++) {
+//                Log.i("모은 데이터베이스", "nullx");
+//                Log.i("모은 데이터베이스", list.get(i).getTag());
+//
+//            }
 
 
             return null;

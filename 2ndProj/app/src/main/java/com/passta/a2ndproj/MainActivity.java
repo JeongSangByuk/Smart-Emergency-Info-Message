@@ -167,13 +167,13 @@ public class MainActivity extends AppCompatActivity {
             insertedLocation_si = location.split(" ")[0];
             insertedLocation_gu = location.split(" ")[1];
 
-            UserListDTO lst = new UserListDTO(insertedLocationName, insertedLocation_si, insertedLocation_gu, imgNumber);
+            UserListDTO lst = new UserListDTO(insertedLocationName, insertedLocation_si, insertedLocation_gu, imgNumber, true);
             AppDatabase db = AppDatabase.getInstance(this);
 
             new UserListDatabaseInsertAsyncTask(db.userListDAO(), lst).execute();
             userList.add(lst);
             int size = userList.size() - 1;
-            hashtagUpDataList.add(new Hashtag_VO(userList.get(size).tag, userList.get(size).img_number, true));
+            hashtagUpDataList.add(new Hashtag_VO(userList.get(size).tag, userList.get(size).img_number, true,location));
             hashtagUpRecyclerViewAdapter.notifyDataSetChanged();
 
             //위치에 따른 msg 추가
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         hashtagUpDataList.add(new Hashtag_VO("내 장소\n추가하기", R.drawable.plus2, false));
         for (int i = 0; i < userList.size(); i++) {
-            hashtagUpDataList.add(new Hashtag_VO(userList.get(i).tag, userList.get(i).img_number, true));
+            hashtagUpDataList.add(new Hashtag_VO(userList.get(i).tag, userList.get(i).img_number, userList.get(i).isHashtagChecked, userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu()));
         }
 
         msgDataList = new ArrayList<>();
@@ -224,17 +224,30 @@ public class MainActivity extends AppCompatActivity {
         oneDayMsgDataList = new ArrayList<>();
 
         //필터 데이터 분류
-        classifyMsgData(true);
+        classifyMsgData();
         createOneDayMsgDataList();
     }
 
     //해쉬태그에 따라 문자데이터 분류하는 메소드
-    public void classifyMsgData(boolean isCheckingCategory) {
+    public void classifyMsgData() {
         classifiedMsgDataList = new ArrayList<>();
         for (int i = 0; i < msgDataList.size(); i++) {
-            if (!hashtagDownDataList.get(msgDataList.get(i).getCategroyIndex()).isClicked() && isCheckingCategory)
+            if (!hashtagDownDataList.get(msgDataList.get(i).getCategroyIndex()).isClicked())
                 continue;
             if (!hashtagDownDataList.get(msgDataList.get(i).getLevel() + 4).isClicked())
+                continue;
+
+            boolean temp = false;
+
+            for (int j = 1; j < hashtagUpDataList.size(); j++) {
+                if (msgDataList.get(i).getSenderLocation().equals(hashtagUpDataList.get(j).getLocation()) && hashtagUpDataList.get(j).isClicked()) {
+                    //해당 location의 해쉬태그가 클릭돼있다면
+                    temp = true;
+                    break;
+                }
+            }
+
+            if (!temp)
                 continue;
 
             classifiedMsgDataList.add(msgDataList.get(i));
@@ -282,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < msgDataList.size(); i++) {
             msgDataList.get(i).calculateTotalMsgPointAndLevel();
         }
-        classifyMsgData(false);
+        classifyMsgData();
         createOneDayMsgDataList();
     }
 
@@ -418,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                         Msg_VO tempMsgVO = msgDataList.get(msgDataList.size() - 1);
 
                         //데베에 저장
-                        new MsgListDatabaseInsertAsyncTask(db.msgDAO(), new MsgDTO(tempMsgVO.getId(), tempMsgVO.getDay(), tempMsgVO.getTime(),tempMsgVO.getMsgText(), tempMsgVO.getSenderLocation(),
+                        new MsgListDatabaseInsertAsyncTask(db.msgDAO(), new MsgDTO(tempMsgVO.getId(), tempMsgVO.getDay(), tempMsgVO.getTime(), tempMsgVO.getMsgText(), tempMsgVO.getSenderLocation(),
                                 tempMsgVO.getLevel(), tempMsgVO.getCircleImageViewId(), obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"), tempMsgVO.getTotalMsgPoint(), tempMsgVO.getCategroyIndex())).execute();
                     }
@@ -426,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
                     sortTotalMsgDataList();
 
                     //필터 데이터 분류
-                    classifyMsgData(true);
+                    classifyMsgData();
                     createOneDayMsgDataList();
                     oneDayMsgRecyclerViewAdapter.notifyDataSetChanged();
 
@@ -482,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
 
             userList = userListDAO.loadUserList();
             if (userList.size() == 0) {
-                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구", R.drawable.home));
+                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구", R.drawable.home, true));
             }
             userList = userListDAO.loadUserList();
             return null;

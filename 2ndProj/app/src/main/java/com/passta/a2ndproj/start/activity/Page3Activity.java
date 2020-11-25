@@ -271,4 +271,6 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+
 }

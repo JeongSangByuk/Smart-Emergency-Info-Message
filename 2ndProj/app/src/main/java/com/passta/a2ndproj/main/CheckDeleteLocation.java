@@ -78,9 +78,6 @@ public class CheckDeleteLocation extends Dialog {
                 String removedLocation = mainActivity.userList.get(position - 1).getLocation_si() + " " + mainActivity.userList.get(position - 1).getLocation_gu();
                 String removedLocation2 = mainActivity.userList.get(position - 1).getLocation_si() + " " + "전체";
 
-                Log.d("test",removedLocation);
-                Log.d("test",removedLocation2);
-
                 boolean hasSameSi = false;
 
                 //문자를 삭제할때 같은 si 가 없으면 ~~시 전체 문자도 삭제해주고 있다면 ~~시 전체문자는 삭제해 주지않는다.
@@ -99,6 +96,10 @@ public class CheckDeleteLocation extends Dialog {
                 mainActivity.hashtagUpRecyclerViewAdapter.notifyDataSetChanged();
 
                 new MsgDataDeleteAsyncTask(mainActivity.db.msgDAO(), removedLocation).execute();
+                //같은 시가 없는 경우에는 데베에서 ~~시 전체도 삭제
+                if (!hasSameSi)
+                    new MsgDataDeleteAsyncTask(mainActivity.db.msgDAO(), removedLocation2).execute();
+
 
                 int size = mainActivity.msgDataList.size();
                 if (hasSameSi) {
@@ -109,7 +110,7 @@ public class CheckDeleteLocation extends Dialog {
                             i--;
                         }
                     }
-                } else{
+                } else {
                     for (int i = 0; i < size; i++) {
                         if (mainActivity.msgDataList.get(i).getSenderLocation().equals(removedLocation) ||
                                 mainActivity.msgDataList.get(i).getSenderLocation().equals(removedLocation2)) {
@@ -122,7 +123,7 @@ public class CheckDeleteLocation extends Dialog {
                 }
 
                 //필터 데이터 분류
-                mainActivity.classifyMsgData(true);
+                mainActivity.classifyMsgData();
                 mainActivity.createOneDayMsgDataList();
                 mainActivity.oneDayMsgRecyclerViewAdapter.notifyDataSetChanged();
 
