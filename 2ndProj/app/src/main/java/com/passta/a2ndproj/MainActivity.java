@@ -21,6 +21,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.passta.a2ndproj.data.AppDatabase;
 import com.passta.a2ndproj.data.FilterDAO;
 import com.passta.a2ndproj.data.FilterDTO;
+import com.passta.a2ndproj.data.MsgDAO;
+import com.passta.a2ndproj.data.MsgDTO;
 import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
 import com.passta.a2ndproj.data.UserSettingDAO;
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public AppDatabase db;
     public List<FilterDTO> filterList;
     public List<UserListDTO> userList;
+    public List<MsgDTO> msgDTOList;
     public UserSettingDTO userSetting;
     public String insertedLocationName;
     public String insertedLocation_si;
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         new FilterDatabaseAsyncTask(db.filterDAO()).execute();
 
     }
+
     public void subcribeTopic(String topic) {
         FirebaseMessaging.getInstance().subscribeToTopic(topic);
         Log.e("Main ", "subcribe Topic : " + topic);
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Seekbar seekbar = new Seekbar(this);
         seekbar.setSeekbar();
 
-        //예시데이터
+        //데이타set
         setData();
 
         oneDayMsgRecyclerViewAdapter = new OneDayMsgRecyclerViewAdapter(oneDayMsgDataList, this);
@@ -155,15 +159,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             insertedLocationName = data.getStringExtra("tag");
             String location = data.getStringExtra("location");
-            int imgNumber = data.getIntExtra("imgNumber",0);
+            int imgNumber = data.getIntExtra("imgNumber", 0);
             Log.d("모은", insertedLocationName + " " + location + Integer.toString(imgNumber));
             insertedLocation_si = location.split(" ")[0];
             insertedLocation_gu = location.split(" ")[1];
 
-            UserListDTO lst = new UserListDTO(insertedLocationName, insertedLocation_si, insertedLocation_gu,imgNumber);
+            UserListDTO lst = new UserListDTO(insertedLocationName, insertedLocation_si, insertedLocation_gu, imgNumber);
             AppDatabase db = AppDatabase.getInstance(this);
 
             new UserListDatabaseInsertAsyncTask(db.userListDAO(), lst).execute();
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             hashtagUpRecyclerViewAdapter.notifyDataSetChanged();
 
             //위치에 따른 msg 추가
-            getMsgData(insertedLocation_si,insertedLocation_gu);
+            getMsgData(insertedLocation_si, insertedLocation_gu);
         }
 
     }
@@ -191,9 +195,20 @@ public class MainActivity extends AppCompatActivity {
         hashtagUpDataList = new ArrayList<>();
 
         hashtagUpDataList.add(new Hashtag_VO("내 장소\n추가하기", R.drawable.plus2, false));
-        for(int i=0;i<userList.size();i++){
+        for (int i = 0; i < userList.size(); i++) {
             hashtagUpDataList.add(new Hashtag_VO(userList.get(i).tag, userList.get(i).img_number, true));
         }
+
+        msgDataList = new ArrayList<>();
+        Log.d("test", String.valueOf(msgDTOList.size()));
+
+        for (int i = 0; i < msgDTOList.size(); i++) {
+            msgDataList.add(new Msg_VO(msgDTOList.get(i).getId(), msgDTOList.get(i).getDay(), msgDTOList.get(i).getTime(), msgDTOList.get(i).getMsgText(), msgDTOList.get(i).getSenderLocation(),
+                    this, new MsgCategoryPoint_VO(msgDTOList.get(i).getRouteCatePoint(), msgDTOList.get(i).getUpbreakCatePoint(), msgDTOList.get(i).getSafetyCatePoint(),
+                    msgDTOList.get(i).getDisasterCatePoint(), msgDTOList.get(i).getEconomyCatePoint())));
+        }
+
+        sortTotalMsgDataList();
 
         hashtagDownDataList = new ArrayList<>();
         hashtagDownDataList.add(new Hashtag_VO("(코로나)\n동선", R.drawable.coronavirus, userSetting.is_clicked_corona_route_hashtag));
@@ -206,33 +221,7 @@ public class MainActivity extends AppCompatActivity {
         hashtagDownDataList.add(new Hashtag_VO("관심도\n3단계", R.drawable.level3, userSetting.is_clicked_lv3_hashtag));
 
         // 데이터 흐름 1. 위치에 따른 재난문자  2. 해쉬태크,필터에 따른 재난문자
-        msgDataList = new ArrayList<>();
         oneDayMsgDataList = new ArrayList<>();
-
-        msgDataList.add(new Msg_VO(1, "2020년 11월 6일", "21:30:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-        msgDataList.add(new Msg_VO(2, "2020년 11월 6일", "11:29:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-        msgDataList.add(new Msg_VO(12, "2020년 11월 6일", "11:31:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-//        msgDataList.add(new Msg_VO(3, "2020년 11월 5일", "11:30:23", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
-//                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-//        msgDataList.add(new Msg_VO(4, "2020년 11월 5일", "11:39:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-//        msgDataList.add(new Msg_VO(5, "2020년 11월 5일", "03:39:10", "11.8일 2명, 11.9일 4명 확진자 추가 발생." +
-//                " 상세내용 추후 시홈페이지에 공개예정입니다. corona.seongnam.go.kr", "[성남시청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-//        msgDataList.add(new Msg_VO(6, "2020년 11월 4일", "21:30:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-//        msgDataList.add(new Msg_VO(7, "2020년 11월 4일", "11:29:23", "해외 유입 확진자가 증가 추세로 해외 입국이 예정되어 있는 가족 및" +
-//                " 외국인근로자가 있을 경우 반드시 완도군보건의료원로 신고 바랍니다", "[완도군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
-//        msgDataList.add(new Msg_VO(8, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-//        msgDataList.add(new Msg_VO(9, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 70, 20, 0, 0)));
-//        msgDataList.add(new Msg_VO(10, "2020년 11월 3일", "21:30:23", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(10, 20, 70, 0, 0)));
-//        msgDataList.add(new Msg_VO(11, "2020년 11월 3일", "03:39:10", "367~369번 확진자 발생. 거주지 등 방역 완료. 코로나19 관련 안내 홈페이지" +
-//                " 참고바랍니다.", "[성북군청]", this, new MsgCategoryPoint_VO(70, 20, 10, 0, 0)));
 
         //필터 데이터 분류
         classifyMsgData(true);
@@ -297,21 +286,21 @@ public class MainActivity extends AppCompatActivity {
         createOneDayMsgDataList();
     }
 
-    public Integer calculateUpHashtagClickedNumber(){
+    public Integer calculateUpHashtagClickedNumber() {
         int result = 0;
-        for(int i=0;i<hashtagUpDataList.size();i++){
-            if(hashtagUpDataList.get(i).isClicked())
+        for (int i = 0; i < hashtagUpDataList.size(); i++) {
+            if (hashtagUpDataList.get(i).isClicked())
                 result++;
         }
         return result;
     }
 
-    public ArrayList<String> returnDayString(String sendingTime){
+    public ArrayList<String> returnDayString(String sendingTime) {
         String dayString = sendingTime.split(" ")[0];
         String timeString = sendingTime.split(" ")[1];
 
-        dayString = dayString.substring(0,dayString.indexOf("/")) + "년 " +
-                dayString.substring(dayString.indexOf("/") + 1,dayString.lastIndexOf("/")) + "월 " + dayString.substring(dayString.lastIndexOf("/") + 1) + "일";
+        dayString = dayString.substring(0, dayString.indexOf("/")) + "년 " +
+                dayString.substring(dayString.indexOf("/") + 1, dayString.lastIndexOf("/")) + "월 " + dayString.substring(dayString.lastIndexOf("/") + 1) + "일";
 
         ArrayList<String> list = new ArrayList<>();
         list.add(dayString);
@@ -362,8 +351,25 @@ public class MainActivity extends AppCompatActivity {
         return oneDayMsgDataList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void sortTotalMsgDataList() {
+        //전체 데이터 시간순 배열
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+        msgDataList.sort(new Comparator<Msg_VO>() {
+            @Override
+            public int compare(Msg_VO t, Msg_VO t1) {
+                try {
+                    return dateFormat.parse(t1.getDay() + " " + t1.getTime()).compareTo(dateFormat.parse(t.getDay() + " " + t1.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+    }
 
-    public void getMsgData(String location_si,String location_gu) {
+
+    public void getMsgData(String location_si, String location_gu) {
 
         serviceApi = RetrofitClient.getClient().create(ServiceApi.class);//내 서버 연결
 
@@ -381,10 +387,10 @@ public class MainActivity extends AppCompatActivity {
                     boolean hasSameLocation_si = false;
 
                     // 이미 똑같은 시 의 문자 정보가 저장돼 있는 경우에는 ~~시 전체 의 문자를 한번더 넣어주지 않기 위해 검사
-                    for (int i=0;i<userList.size();i++){
-                        if(location_si.equals(userList.get(i).getLocation_si())){
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (location_si.equals(userList.get(i).getLocation_si())) {
                             temp++;
-                            if(temp>1){
+                            if (temp > 1) {
                                 hasSameLocation_si = true;
                                 break;
                             }
@@ -400,29 +406,24 @@ public class MainActivity extends AppCompatActivity {
                         tempDay = returnDayString(obj.getString("msg_sendingTime"));
 
                         // 이미 똑같은 ~~시 문자가 저장돼있는경우 ~~시 전체의 문자의 경우는 continue 시켜서 add안함.
-                        if(hasSameLocation_si){
-                            if(obj.getString("msg_sendingArea").split(" ")[1].equals("전체"))
+                        if (hasSameLocation_si) {
+                            if (obj.getString("msg_sendingArea").split(" ")[1].equals("전체"))
                                 continue;
                         }
 
                         msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content").trim(),
                                 obj.getString("msg_sendingArea"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"))));
+
+                        Msg_VO tempMsgVO = msgDataList.get(msgDataList.size() - 1);
+
+                        //데베에 저장
+                        new MsgListDatabaseInsertAsyncTask(db.msgDAO(), new MsgDTO(tempMsgVO.getId(), tempMsgVO.getDay(), tempMsgVO.getTime(),tempMsgVO.getMsgText(), tempMsgVO.getSenderLocation(),
+                                tempMsgVO.getLevel(), tempMsgVO.getCircleImageViewId(), obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
+                                obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"), tempMsgVO.getTotalMsgPoint(), tempMsgVO.getCategroyIndex())).execute();
                     }
 
-                    //전체 데이터 시간순 배열
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
-                    msgDataList.sort(new Comparator<Msg_VO>() {
-                        @Override
-                        public int compare(Msg_VO t, Msg_VO t1) {
-                            try {
-                                return dateFormat.parse(t1.getDay() + " " + t1.getTime()).compareTo(dateFormat.parse(t.getDay() + " " + t1.getTime()));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            return 0;
-                        }
-                    });
+                    sortTotalMsgDataList();
 
                     //필터 데이터 분류
                     classifyMsgData(true);
@@ -481,9 +482,8 @@ public class MainActivity extends AppCompatActivity {
 
             userList = userListDAO.loadUserList();
             if (userList.size() == 0) {
-                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구",R.drawable.home));
+                userListDAO.insert(new UserListDTO("모은", "서울특별시", "광진구", R.drawable.home));
             }
-
             userList = userListDAO.loadUserList();
             return null;
         }
@@ -521,6 +521,28 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            new MsgDataAsyncTask(db.msgDAO()).execute();
+        }
+    }
+
+    public class MsgDataAsyncTask extends AsyncTask<MsgDAO, Void, Void> {
+
+        private MsgDAO msgDAO;
+
+        public MsgDataAsyncTask(MsgDAO msgDAO) {
+            this.msgDAO = msgDAO;
+        }
+
+        @Override
+        protected Void doInBackground(MsgDAO... msgDAOS) {
+            msgDTOList = msgDAO.loadMsgList();
+            return null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             start();
         }
     }
@@ -534,13 +556,30 @@ public class MainActivity extends AppCompatActivity {
             this.userListDTO = userListDTO;
         }
 
-
         @Override
         protected Void doInBackground(UserListDTO... userListDTOS) {
 
             userListDAO.insert(userListDTO);
             List<UserListDTO> lst = userListDAO.loadUserList();
             userList = lst;
+            return null;
+        }
+    }
+
+    public class MsgListDatabaseInsertAsyncTask extends AsyncTask<MsgDTO, Void, Void> {
+
+        private MsgDAO msgDAO;
+        private MsgDTO msgDTO;
+
+        public MsgListDatabaseInsertAsyncTask(MsgDAO msgDAO, MsgDTO msgDTo) {
+            this.msgDAO = msgDAO;
+            this.msgDTO = msgDTo;
+        }
+
+        @Override
+        protected Void doInBackground(MsgDTO... msgDTOS) {
+            msgDAO.insert(msgDTO);
+            msgDTOList = msgDAO.loadMsgList();
             return null;
         }
     }

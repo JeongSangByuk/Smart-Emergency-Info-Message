@@ -144,8 +144,9 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-
-                    CheckDeleteLocation checkDeleteLocation = new CheckDeleteLocation(mainActivity, getAdapterPosition());
+                    if (getAdapterPosition() != 0) {
+                        CheckDeleteLocation checkDeleteLocation = new CheckDeleteLocation(mainActivity, getAdapterPosition());
+                    }
 
                     return true;
                 }
