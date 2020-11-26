@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ import retrofit2.Response;
 
 public class Page3Activity extends AppCompatActivity implements View.OnClickListener {
     private TextView next;
-    private TextView back;
+    private ImageView back;
     private IndicatorSeekBar seekbar1;
     private IndicatorSeekBar seekbar2;
     private IndicatorSeekBar seekbar3;
@@ -75,14 +76,14 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
     private void setStatusBar() {
         View view = getWindow().getDecorView();
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(Color.parseColor("#6bc7ee"));//색 지정
+        getWindow().setStatusBarColor(Color.parseColor("#ffffff"));//색 지정
 
     }
     public void InitializeView()
     {
 
-        next = (TextView)findViewById(R.id.next);
-        back = (TextView)findViewById(R.id.back);
+        next = (TextView)findViewById(R.id.next_page3_activity);
+        back = (ImageView) findViewById(R.id.back_page3_activity);
         seekbar1 = (IndicatorSeekBar)findViewById(R.id.seekbar1);
         seekbar2 = (IndicatorSeekBar)findViewById(R.id.seekbar2);
         seekbar3 = (IndicatorSeekBar)findViewById(R.id.seekbar3);
@@ -101,11 +102,11 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
     //4,3,2,1
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.next:
+            case R.id.next_page3_activity:
                 getSeekbarProgress();
                 goToNextActivity(new Page4Activity());
                 break;
-            case R.id.back:
+            case R.id.back_page3_activity:
                 goToNextActivity(new Page2Activity());
                 break;
         }

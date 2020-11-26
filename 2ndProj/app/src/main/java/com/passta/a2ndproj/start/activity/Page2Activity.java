@@ -102,7 +102,7 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
     private void setStatusBar() {
         View view = getWindow().getDecorView();
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(Color.parseColor("#6bc7ee"));//색 지정
+        getWindow().setStatusBarColor(Color.parseColor("#ffffff"));//색 지정
 
     }
 

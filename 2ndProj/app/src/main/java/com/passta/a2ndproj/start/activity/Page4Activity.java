@@ -10,11 +10,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Page4Activity extends AppCompatActivity implements View.OnClickListener{
     private TextView next;
-    private TextView back;
+    private ImageView back;
     private TextView bank_data;
 
 
@@ -32,14 +33,14 @@ public class Page4Activity extends AppCompatActivity implements View.OnClickList
     private void setStatusBar() {
         View view = getWindow().getDecorView();
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(Color.parseColor("#6bc7ee"));//색 지정
+        getWindow().setStatusBarColor(Color.parseColor("#ffffff"));//색 지정
 
     }
     public void InitializeView()
     {
 
-        next = (TextView)findViewById(R.id.next);
-        back = (TextView)findViewById(R.id.back);
+        next = (TextView)findViewById(R.id.next_page4_activity);
+        back = (ImageView)findViewById(R.id.back_page4_activity);
         bank_data = (TextView)findViewById(R.id.bank_data);
 
 
@@ -54,10 +55,10 @@ public class Page4Activity extends AppCompatActivity implements View.OnClickList
 
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.next:
+            case R.id.next_page4_activity:
                 goToNextActivity(new MainActivity());
                 break;
-            case R.id.back:
+            case R.id.back_page4_activity:
                 goToNextActivity(new Page3Activity());
                 break;
             case R.id.bank_data:
