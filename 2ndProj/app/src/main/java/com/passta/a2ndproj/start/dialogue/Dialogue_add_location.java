@@ -87,12 +87,23 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
         Log.d("모은", "onActivityResult(add)");
 
         if (resultcode == RESULT_OK) {
+
+            boolean isFinished = data.getBooleanExtra("isFinished",false);
+            if(isFinished){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("tag", data.getStringExtra("tag"));
+                intent.putExtra("location",data.getStringExtra("location"));
+                intent.putExtra("imgNumber", data.getIntExtra("imgNumber",0));
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+
+
             String location_si = data.getStringExtra("location_si");
             String location_gu = data.getStringExtra("location_gu");
             Log.d("모은", location_si + " " + location_gu);
             location.setVisibility(View.VISIBLE);
             location.setText(location_si + " " + location_gu);
-
         }
     }
 
@@ -131,7 +142,7 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
         int y = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setLayout(x, y);
 
-        if(nowType.equals("main")){
+        if (nowType.equals("main")) {
             getWindow().setDimAmount(0.88f);
         }
 
@@ -171,10 +182,10 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
                 break;
             case R.id.set_location:
                 Intent intent = new Intent(getBaseContext(), Dialogue_select_location.class);
-                if(nowType.equals("start"))
-                    intent.putExtra("type","start");
+                if (nowType.equals("start"))
+                    intent.putExtra("type", "start");
                 else
-                    intent.putExtra("type","main");
+                    intent.putExtra("type", "main");
                 startActivityForResult(intent, 1003);
                 break;
             case R.id.confirm:
@@ -191,35 +202,48 @@ public class Dialogue_add_location extends AppCompatActivity implements View.OnC
                     Boolean isOverlap = false;
 
                     //tag과 location 중복 체크
-                    for(int i=0;i<userList.size(); i++){
+                    for (int i = 0; i < userList.size(); i++) {
                         String tempLocation = userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu();
                         String tempTag = userList.get(i).getTag();
 
-                        if(tempLocation.equals(location.getText().toString())){
+                        if (tempLocation.equals(location.getText().toString())) {
                             Toast.makeText(this, "이미 수신 지역으로 등록 돼 있는 지역입니다.", Toast.LENGTH_SHORT).show();
                             isOverlap = true;
                             return;
-                        } else if(tempTag.equals(tag_editing.getText().toString())){
+                        } else if (tempTag.equals(tag_editing.getText().toString())) {
                             Toast.makeText(this, "이미 같은 이름의 장소가 등록 돼 있습니다.", Toast.LENGTH_SHORT).show();
                             isOverlap = true;
                             return;
                         }
                     }
 
-                    if (nowType.equals("start") && !isOverlap) {
-                        intent = new Intent(getApplicationContext(), Page2Activity.class);
+//                    if (nowType.equals("start") && !isOverlap) {
+//                        intent = new Intent(getApplicationContext(), Page2Activity.class);
+//                        intent.putExtra("tag", tag_editing.getText().toString());
+//                        intent.putExtra("location", location.getText().toString());
+//                        intent.putExtra("imgNumber", locationList.get(adapterImageLocation.selectedPosition));
+//                        setResult(RESULT_OK, intent);
+//                        finish();
+//                    } else if(nowType.equals("main") && !isOverlap){
+//                        intent = new Intent(getApplicationContext(), MainActivity.class);
+//                        intent.putExtra("tag", tag_editing.getText().toString());
+//                        intent.putExtra("location", location.getText().toString());
+//                        intent.putExtra("imgNumber", locationList.get(adapterImageLocation.selectedPosition));
+//                        setResult(RESULT_OK, intent);
+//                        finish();
+//                    }
+                    if (!isOverlap) {
+                        intent = new Intent(getApplicationContext(), Dialog_complete_add_location.class);
+                        intent.putExtra("nowType", nowType);
                         intent.putExtra("tag", tag_editing.getText().toString());
                         intent.putExtra("location", location.getText().toString());
                         intent.putExtra("imgNumber", locationList.get(adapterImageLocation.selectedPosition));
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if(nowType.equals("main") && !isOverlap){
-                        intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("tag", tag_editing.getText().toString());
-                        intent.putExtra("location", location.getText().toString());
-                        intent.putExtra("imgNumber", locationList.get(adapterImageLocation.selectedPosition));
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        //startActivityForResult(intent, RESULT_OK);
+                        //setResult(RESULT_OK, intent);
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivityForResult(intent,1003);
+                        //finish();
+
                     }
                 }
 

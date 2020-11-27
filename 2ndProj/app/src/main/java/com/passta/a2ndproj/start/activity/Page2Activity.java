@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
 import com.passta.a2ndproj.data.AppDatabase;
+import com.passta.a2ndproj.data.FilterDAO;
+import com.passta.a2ndproj.data.FilterDTO;
 import com.passta.a2ndproj.data.MsgDAO;
 import com.passta.a2ndproj.data.MsgDTO;
 import com.passta.a2ndproj.data.UserListDAO;
@@ -58,6 +60,7 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
     private String location_gu;
     private Adapter_page2 mAdapter;
     public List<UserListDTO> list;
+    public List<FilterDTO> filterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,8 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
         //db생성
         AppDatabase db = AppDatabase.getInstance(this);
         new DatabaseAsyncTask(db.userListDAO()).execute();
+        //filter db를 디폴트값으로 set해준다.
+        new FiterDatabaseAsyncTask(db.filterDAO()).execute();
 
         InitializeView();
         SetListener();
@@ -80,7 +85,6 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
         Log.d("모은", "onActivityResult(page2)");
 
         if (resultcode == RESULT_OK) {
-
             tag = data.getStringExtra("tag");
             String location = data.getStringExtra("location");
             int imgNumber = data.getIntExtra("imgNumber",0);
@@ -219,4 +223,26 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
             return null;
         }
     }
+
+    public class FiterDatabaseAsyncTask extends AsyncTask<FilterDTO,Void,Void> {
+
+        private FilterDAO filterDAO;
+
+        FiterDatabaseAsyncTask(FilterDAO filterDAO)
+        {
+            this.filterDAO = filterDAO;
+        }
+        @Override
+        protected Void doInBackground(FilterDTO... filterDTOS) {
+            filterList = filterDAO.loadFilterList();
+            if(filterList.size() == 0)
+            {
+                filterDAO.insert(new FilterDTO(0,2,2,2,2,2));
+                filterList = filterDAO.loadFilterList();
+            }
+
+            return null;
+        }
+    }
+
 }

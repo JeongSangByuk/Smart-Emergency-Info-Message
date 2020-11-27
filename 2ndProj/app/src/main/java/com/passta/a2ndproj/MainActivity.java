@@ -5,7 +5,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,6 +41,7 @@ import com.passta.a2ndproj.main.OneDayMsg_VO;
 import com.passta.a2ndproj.main.Seekbar;
 import com.passta.a2ndproj.network.RetrofitClient;
 import com.passta.a2ndproj.network.ServiceApi;
+import com.passta.a2ndproj.start.activity.Page1Activity;
 import com.passta.a2ndproj.start.activity.Page2Activity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.warkiz.widget.IndicatorSeekBar;
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     public String insertedLocation_si;
     public String insertedLocation_gu;
     private ServiceApi serviceApi;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -160,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+
             insertedLocationName = data.getStringExtra("tag");
             String location = data.getStringExtra("location");
             int imgNumber = data.getIntExtra("imgNumber", 0);
@@ -200,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         msgDataList = new ArrayList<>();
-        Log.d("test", String.valueOf(msgDTOList.size()));
 
         for (int i = 0; i < msgDTOList.size(); i++) {
             msgDataList.add(new Msg_VO(msgDTOList.get(i).getId(), msgDTOList.get(i).getDay(), msgDTOList.get(i).getTime(), msgDTOList.get(i).getMsgText(), msgDTOList.get(i).getSenderLocation(),

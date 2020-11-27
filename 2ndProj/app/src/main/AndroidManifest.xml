@@ -47,6 +47,9 @@
         <activity
             android:name=".start.dialogue.Dialogue_add_location"
             android:theme="@style/PopUpTheme" />
+        <activity android:name=".start.dialogue.Dialog_complete_add_location"
+            android:theme="@style/PopUpTheme"
+            />
         <activity android:name=".network.NetworkActivity" />
         <activity android:name=".start.activity.Page4Activity" />
         <activity android:name=".start.activity.Page2Activity" />
@@ -58,8 +61,8 @@
         <activity android:name=".MainActivity" />
 
 
-        <activity android:name=".start.activity.Page1Activity">
-
+        <activity android:name=".start.activity.Page1Activity"/>
+        <activity android:name=".IntroLoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,20 +80,20 @@
 <!--        </activity>-->
 
 
-        <service
-            android:name=".FirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".FirebaseInstanceIDService">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
-        <service
-            android:name=".FirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".FirebaseMessagingService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
 
 

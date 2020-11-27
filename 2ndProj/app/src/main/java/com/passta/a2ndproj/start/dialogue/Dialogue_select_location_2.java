@@ -65,6 +65,7 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
         int y = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setLayout(x, y);
 
+        //뒤에 밝기 조정
         if(nowType.equals("main")){
             getWindow().setDimAmount(0.88f);
         }
