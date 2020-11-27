@@ -174,14 +174,18 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
         mainActivity.hashtagUpDataList.get(position).setClicked(false);
         new UpdateUserListDatabaseAsyncTask(mainActivity.db.userListDAO(),hashtagText,false).execute();
 
-        //카테고리에 따른 삭제
+        //장소에 따른 삭제
         for (int i = 0; i < mainActivity.oneDayMsgDataList.size(); i++) {
 
             int size = mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().size();
 
             for (int j = 0; j < size; j++) {
 
-                if (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().get(j).getSenderLocation().equals(location)) {
+                if (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().get(j).getSenderLocation().equals(location) ||
+                        (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().get(j).getSenderLocation().split(" ")[0].equals(
+                                location.split(" ")[0]) && (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().
+                                        get(j).getSenderLocation().split(" ")[1].equals("전체"))
+                        )) {
                     mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().remove(j);
                     j--;
                     size--;

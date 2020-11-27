@@ -246,7 +246,10 @@ public class MainActivity extends AppCompatActivity {
             boolean temp = false;
 
             for (int j = 1; j < hashtagUpDataList.size(); j++) {
-                if (msgDataList.get(i).getSenderLocation().equals(hashtagUpDataList.get(j).getLocation()) && hashtagUpDataList.get(j).isClicked()) {
+                if ((msgDataList.get(i).getSenderLocation().equals(hashtagUpDataList.get(j).getLocation()) ||(
+                        msgDataList.get(i).getSenderLocation().split(" ")[0].equals(hashtagUpDataList.get(j).getLocation().split(" ")[0]) &&
+                                msgDataList.get(i).getSenderLocation().split(" ")[1].equals("전체")
+                ))&& hashtagUpDataList.get(j).isClicked()) {
                     //해당 location의 해쉬태그가 클릭돼있다면
                     temp = true;
                     break;
@@ -433,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
                         msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content").trim(),
                                 obj.getString("msg_sendingArea"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"))));
-
+                        Log.d("test", String.valueOf(msgDataList.size()));
                         Msg_VO tempMsgVO = msgDataList.get(msgDataList.size() - 1);
 
                         //데베에 저장
