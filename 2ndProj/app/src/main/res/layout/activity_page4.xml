@@ -124,7 +124,7 @@
             android:fontFamily="@font/nanumsquareb"
             android:textColor="@color/black"
             android:gravity="center"
-            android:text="계좌 데이터 등록하기"
+            android:text="계좌 연결하기"
             android:textSize="17dp" />
     </LinearLayout>
 

@@ -54,7 +54,11 @@
         <activity android:name=".start.activity.Page4Activity" />
         <activity android:name=".start.activity.Page2Activity" />
         <activity android:name=".start.activity.Page3Activity" />
-        <activity android:name=".start.activity.AccountPasswordActivity" />
+        <activity android:name=".start.activity.SearchBankActivity"/>
+        <activity android:name=".start.activity.AccountNumberActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".start.activity.AccountPasswordActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".start.activity.AccountGetDataActivity" />
 
 

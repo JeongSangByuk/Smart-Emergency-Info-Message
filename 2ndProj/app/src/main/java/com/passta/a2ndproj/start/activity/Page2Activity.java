@@ -58,7 +58,7 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
     private String tag;
     private String location_si;
     private String location_gu;
-    private Adapter_page2 mAdapter;
+    public Adapter_page2 mAdapter;
     public List<UserListDTO> list;
     public List<FilterDTO> filterList;
 

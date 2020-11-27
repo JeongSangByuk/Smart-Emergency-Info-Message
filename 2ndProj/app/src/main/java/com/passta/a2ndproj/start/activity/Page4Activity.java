@@ -56,6 +56,7 @@ public class Page4Activity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v){
         switch (v.getId()){
             case R.id.next_page4_activity:
+                //intent 할때 앞 액티비티 스택을 다지우면서 가야함.
                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent1);
@@ -65,7 +66,6 @@ public class Page4Activity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.bank_data:
                 Intent intent = new Intent(getApplicationContext(), SearchBankActivity.class);
-//                    intent.putExtra("setting", "login");
                 startActivity(intent);
 
                 break;
@@ -73,7 +73,6 @@ public class Page4Activity extends AppCompatActivity implements View.OnClickList
     }
     private void goToNextActivity(Activity activity) {
         finish();
-        //intent 할때 앞 액티비티 스택을 다지우면서 가야함.
         Intent intent = new Intent(getApplicationContext(), activity.getClass());
         startActivity(intent);
     }

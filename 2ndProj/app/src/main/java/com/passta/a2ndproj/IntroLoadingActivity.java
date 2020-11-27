@@ -51,21 +51,27 @@ public class IntroLoadingActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                //앱 최초 실행 일 경우 or Msg 데이터 size가 0일경우 Start1Activity 로이동.
-                if (checkFirst || userList.size() == 0) {
-                    Intent intent = new Intent(getApplicationContext(), Page1Activity.class);
-                    startActivity(intent); //다음화면으로 넘어감
-                    finish();
+//                //앱 최초 실행 일 경우 or Msg 데이터 size가 0일경우 Start1Activity 로이동.
+//                if (checkFirst || userList.size() == 0) {
+//                    Intent intent = new Intent(getApplicationContext(), Page1Activity.class);
+//                    startActivity(intent); //다음화면으로 넘어감
+//                    finish();
+//
+//                    //false로 만들어줌으로써 최초실행 이후에는 안들어오게끔
+//                    sharedPreferences.edit().putBoolean("checkFirst", false).apply();
+//                } else {
+//                    //앱 최초 실행이 아닐 경우 Main으로 로이동.
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    startActivity(intent); //다음화면으로 넘어감
+//                    finish();
+//
+//                }
 
-                    //false로 만들어줌으로써 최초실행 이후에는 안들어오게끔
-                    sharedPreferences.edit().putBoolean("checkFirst", false).apply();
-                } else {
-                    //앱 최초 실행이 아닐 경우 Main으로 로이동.
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent); //다음화면으로 넘어감
-                    finish();
+                //바로 페이지1액티로 넘어가는 코드드
+               Intent intent = new Intent(getApplicationContext(), Page1Activity.class);
+                startActivity(intent); //다음화면으로 넘어감
+                finish();
 
-                }
             }
         }, 3000); //3초 뒤에 Runner객체 실행하도록 함
     }
