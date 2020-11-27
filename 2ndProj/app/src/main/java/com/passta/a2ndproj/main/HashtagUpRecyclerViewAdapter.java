@@ -93,6 +93,8 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
         protected CircleImageView circleImageView;
         protected MainActivity mainActivity;
 
+        @SuppressLint("ResourceType")
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public HashtagUpRecyclerViewHolder(@NonNull View itemView, MainActivity mainActivity) {
             super(itemView);
             this.mainActivity = mainActivity;
@@ -113,8 +115,13 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                         mainActivity.startActivityForResult(intent, 1003);
                         return;
                     }
+
+                    if(getAdapterPosition() == 1){
+                        return;
+                    }
+
                     String hashtagText = mainActivity.hashtagUpDataList.get(getAdapterPosition()).getHashtagText().replaceAll("\n", "");
-                    String hashtagLocation = mainActivity.userList.get(getAdapterPosition()-1).getLocation_si() + " " +  mainActivity.userList.get(getAdapterPosition()-1).getLocation_gu();
+                    String hashtagLocation = mainActivity.userList.get(getAdapterPosition()-2).getLocation_si() + " " +  mainActivity.userList.get(getAdapterPosition()-2).getLocation_gu();
 
                     // 클릭 돼 있는 경우
                     if (mainActivity.hashtagUpDataList.get(getAdapterPosition()).isClicked()) {

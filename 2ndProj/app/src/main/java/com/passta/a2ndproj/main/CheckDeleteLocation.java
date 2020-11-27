@@ -65,7 +65,7 @@ public class CheckDeleteLocation extends Dialog {
             @Override
             public void onClick(View view) {
 
-                if (mainActivity.hashtagUpDataList.size() == 2) {
+                if (mainActivity.hashtagUpDataList.size() == 3) {
                     Toast.makeText(context, "수신 지역은 반드시 한개 이상 저장 돼 있어야 합니다.", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -75,8 +75,8 @@ public class CheckDeleteLocation extends Dialog {
                     return;
                 }
                 //삭제 주소.
-                String removedLocation = mainActivity.userList.get(position - 1).getLocation_si() + " " + mainActivity.userList.get(position - 1).getLocation_gu();
-                String removedLocation2 = mainActivity.userList.get(position - 1).getLocation_si() + " " + "전체";
+                String removedLocation = mainActivity.userList.get(position - 2).getLocation_si() + " " + mainActivity.userList.get(position - 2).getLocation_gu();
+                String removedLocation2 = mainActivity.userList.get(position - 2).getLocation_si() + " " + "전체";
 
                 boolean hasSameSi = false;
 
@@ -84,14 +84,14 @@ public class CheckDeleteLocation extends Dialog {
                 for (int i = 0; i < mainActivity.userList.size(); i++) {
                     String temp = mainActivity.userList.get(i).getLocation_si();
 
-                    if (i != (position - 1) && temp.equals(removedLocation.split(" ")[0])) {
+                    if (i != (position - 2) && temp.equals(removedLocation.split(" ")[0])) {
                         hasSameSi = true;
                         break;
                     }
                 }
 
                 //해쉬태그삭제
-                new UserListDataDeleteAsyncTask(mainActivity.db.userListDAO(), mainActivity.userList.get(position - 1).getTag()).execute();
+                new UserListDataDeleteAsyncTask(mainActivity.db.userListDAO(), mainActivity.userList.get(position - 2).getTag()).execute();
                 mainActivity.hashtagUpDataList.remove(position);
                 mainActivity.hashtagUpRecyclerViewAdapter.notifyDataSetChanged();
 

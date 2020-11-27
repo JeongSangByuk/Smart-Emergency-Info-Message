@@ -53,7 +53,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
 
-                    android:text="[완도구청]"
+                    android:text="울산광역시 전체"
                     android:textColor="@color/black"
                     android:textSize="12dp" />
 

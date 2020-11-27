@@ -202,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
         hashtagUpDataList = new ArrayList<>();
 
         hashtagUpDataList.add(new Hashtag_VO("내 장소\n추가하기", R.drawable.plus2, false));
+        hashtagUpDataList.add(new Hashtag_VO("내 국민\n은행 계좌",R.drawable.bank_kb_gray_logo,false));
+
         for (int i = 0; i < userList.size(); i++) {
             hashtagUpDataList.add(new Hashtag_VO(userList.get(i).tag, userList.get(i).img_number, userList.get(i).isHashtagChecked, userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu()));
         }
@@ -245,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
             boolean temp = false;
 
-            for (int j = 1; j < hashtagUpDataList.size(); j++) {
+            for (int j = 2; j < hashtagUpDataList.size(); j++) {
                 if ((msgDataList.get(i).getSenderLocation().equals(hashtagUpDataList.get(j).getLocation()) ||(
                         msgDataList.get(i).getSenderLocation().split(" ")[0].equals(hashtagUpDataList.get(j).getLocation().split(" ")[0]) &&
                                 msgDataList.get(i).getSenderLocation().split(" ")[1].equals("전체")
