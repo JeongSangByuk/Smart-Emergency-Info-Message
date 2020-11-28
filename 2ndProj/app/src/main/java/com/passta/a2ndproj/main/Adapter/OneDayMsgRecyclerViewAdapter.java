@@ -1,7 +1,6 @@
-package com.passta.a2ndproj.main;
+package com.passta.a2ndproj.main.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
+import com.passta.a2ndproj.main.Callback.OneDayMsgDiffentCallback;
+import com.passta.a2ndproj.main.DataVO.OneDayMsg_VO;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import java.util.ArrayList;
 

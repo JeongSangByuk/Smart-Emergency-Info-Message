@@ -1,4 +1,4 @@
-package com.passta.a2ndproj.main;
+package com.passta.a2ndproj.main.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;

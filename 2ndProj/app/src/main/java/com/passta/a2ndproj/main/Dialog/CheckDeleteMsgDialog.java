@@ -1,4 +1,4 @@
-package com.passta.a2ndproj.main;
+package com.passta.a2ndproj.main.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,10 +16,9 @@ import androidx.annotation.NonNull;
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
 import com.passta.a2ndproj.data.MsgDAO;
-import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
-
-import java.util.List;
+import com.passta.a2ndproj.main.DataVO.Msg_VO;
+import com.passta.a2ndproj.main.Callback.DialogDeleteListener;
 
 public class CheckDeleteMsgDialog extends Dialog {
     private Button cancelButton, deleteButton;

@@ -3,22 +3,16 @@ package com.passta.a2ndproj;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import android.app.AppOpsManager;
-import android.content.Context;
+
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -35,26 +29,20 @@ import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
 import com.passta.a2ndproj.data.UserSettingDAO;
 import com.passta.a2ndproj.data.UserSettingDTO;
-import com.passta.a2ndproj.main.HashtagDownRecyclerViewAdapter;
-import com.passta.a2ndproj.main.HashtagUpRecyclerViewAdapter;
-import com.passta.a2ndproj.main.Hashtag_VO;
-import com.passta.a2ndproj.main.MsgCategoryPoint_VO;
-import com.passta.a2ndproj.main.Msg_VO;
-import com.passta.a2ndproj.main.OneDayMsgRecyclerViewAdapter;
-import com.passta.a2ndproj.main.OneDayMsg_VO;
+import com.passta.a2ndproj.main.Adapter.HashtagDownRecyclerViewAdapter;
+import com.passta.a2ndproj.main.Adapter.HashtagUpRecyclerViewAdapter;
+import com.passta.a2ndproj.main.DataVO.Hashtag_VO;
+import com.passta.a2ndproj.main.DataVO.MsgCategoryPoint_VO;
+import com.passta.a2ndproj.main.DataVO.Msg_VO;
+import com.passta.a2ndproj.main.Adapter.OneDayMsgRecyclerViewAdapter;
+import com.passta.a2ndproj.main.DataVO.OneDayMsg_VO;
 import com.passta.a2ndproj.main.Seekbar;
 import com.passta.a2ndproj.network.RetrofitClient;
 import com.passta.a2ndproj.network.ServiceApi;
-import com.passta.a2ndproj.start.activity.Page1Activity;
 import com.passta.a2ndproj.notification.AlarmSettingActivity;
 
-import com.passta.a2ndproj.start.activity.Page2Activity;
-import com.passta.a2ndproj.start.activity.Page3Activity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.tistory.freemmer.lib.fmnotification.FMNotification;
 import com.warkiz.widget.IndicatorSeekBar;
-import com.warkiz.widget.OnSeekChangeListener;
-import com.warkiz.widget.SeekParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     public String insertedLocation_gu;
     private ServiceApi serviceApi;
     private ImageView refreshButton;
+
 
 
 
@@ -497,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
                         Msg_VO tempMsgVO = msgDataList.get(msgDataList.size() - 1);
 
                         //데베에 저장
-                        new MsgListDatabaseInsertAsyncTask(db.MsgDAO(), new MsgDTO(tempMsgVO.getId(), tempMsgVO.getDay(), tempMsgVO.getTime(), tempMsgVO.getMsgText(), tempMsgVO.getSenderLocation(),
+                        new MsgListDatabaseInsertAsyncTask(db.MsgDAO(), new MsgDTO( tempMsgVO.getDay(), tempMsgVO.getTime(), tempMsgVO.getMsgText(), tempMsgVO.getSenderLocation(),
                                 tempMsgVO.getLevel(), tempMsgVO.getCircleImageViewId(), obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"), tempMsgVO.getTotalMsgPoint(), tempMsgVO.getCategroyIndex())).execute();
                     }

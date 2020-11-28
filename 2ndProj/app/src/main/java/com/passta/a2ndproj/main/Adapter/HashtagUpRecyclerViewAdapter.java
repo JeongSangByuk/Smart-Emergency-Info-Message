@@ -1,4 +1,4 @@
-package com.passta.a2ndproj.main;
+package com.passta.a2ndproj.main.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,6 +22,7 @@ import com.passta.a2ndproj.R;
 
 import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
+import com.passta.a2ndproj.main.Dialog.CheckDeleteLocationDialog;
 import com.passta.a2ndproj.start.dialogue.Dialogue_add_location;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,6 +38,7 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
         this.mainActivity = mainActivity;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public HashtagUpRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -216,5 +218,5 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
             return null;
         }
     }
-
 }
+

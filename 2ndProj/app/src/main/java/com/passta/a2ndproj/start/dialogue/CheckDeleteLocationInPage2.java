@@ -88,5 +88,6 @@ public class CheckDeleteLocationInPage2 extends Dialog {
             userListDAO.delete(tag);
             return null;
         }
+
     }
 }

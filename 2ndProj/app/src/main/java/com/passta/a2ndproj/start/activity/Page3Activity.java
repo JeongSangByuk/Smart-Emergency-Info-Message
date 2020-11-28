@@ -3,7 +3,6 @@ package com.passta.a2ndproj.start.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
 import com.passta.a2ndproj.data.AppDatabase;
 import com.passta.a2ndproj.data.FilterDAO;
@@ -12,8 +11,8 @@ import com.passta.a2ndproj.data.MsgDAO;
 import com.passta.a2ndproj.data.MsgDTO;
 import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
-import com.passta.a2ndproj.main.MsgCategoryPoint_VO;
-import com.passta.a2ndproj.main.Msg_VO;
+import com.passta.a2ndproj.main.DataVO.MsgCategoryPoint_VO;
+import com.passta.a2ndproj.main.DataVO.Msg_VO;
 import com.passta.a2ndproj.network.RetrofitClient;
 import com.passta.a2ndproj.network.ServiceApi;
 import com.warkiz.widget.IndicatorSeekBar;
@@ -181,7 +180,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance")),seekbar1_progress,seekbar2_progress,seekbar3_progress,seekbar4_progress,seekbar5_progress);
 
                         //데베에 저장
-                        new MsgListDatabaseInsertAsyncTask(db.MsgDAO(), new MsgDTO(tempMsgVO.getId(), tempMsgVO.getDay(), tempMsgVO.getTime(), tempMsgVO.getMsgText(),
+                        new MsgListDatabaseInsertAsyncTask(db.MsgDAO(), new MsgDTO( tempMsgVO.getDay(), tempMsgVO.getTime(), tempMsgVO.getMsgText(),
                                 tempMsgVO.getSenderLocation(), tempMsgVO.getLevel(), tempMsgVO.getCircleImageViewId(), obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"), tempMsgVO.getTotalMsgPoint(), tempMsgVO.getCategroyIndex())).execute();
                     }

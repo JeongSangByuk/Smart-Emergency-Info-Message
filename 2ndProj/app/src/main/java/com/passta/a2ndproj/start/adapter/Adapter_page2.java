@@ -14,6 +14,7 @@ import com.passta.a2ndproj.R;
 import com.passta.a2ndproj.start.activity.Page2Activity;
 import com.passta.a2ndproj.start.dialogue.CheckDeleteLocationInPage2;
 
+
 public class Adapter_page2 extends RecyclerView.Adapter<Adapter_page2.ViewHolder>{
 
 //    private List<UserListDTO> mList;
