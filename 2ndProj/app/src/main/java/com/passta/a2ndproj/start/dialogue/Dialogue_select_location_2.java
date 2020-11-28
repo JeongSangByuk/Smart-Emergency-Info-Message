@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import retrofit2.http.HEAD;
+
 public class Dialogue_select_location_2 extends AppCompatActivity {
 
     private ArrayList<String> mArrayList = new ArrayList<>();;
@@ -72,13 +74,13 @@ public class Dialogue_select_location_2 extends AppCompatActivity {
 
     }
     public void initialize_recyclerview(int numberOfColumns, int position_si)
+
     {
         numberOfColumns = numberOfColumns;
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, numberOfColumns);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
 //        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 //        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-
 
         String filename = "gu_"+Integer.toString(position_si);
         set_list(mArrayList,filename);

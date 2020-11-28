@@ -15,7 +15,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserListDAO userListDAO();
     public abstract FilterDAO filterDAO();
     public abstract UserSettingDAO userSettingDAO();
-    public abstract MsgDAO msgDAO();
+    public abstract MsgDAO MsgDAO();
 
     private static AppDatabase mAppDatabase;
 

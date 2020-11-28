@@ -1,10 +1,15 @@
 package com.passta.a2ndproj.main;
 
+import android.os.AsyncTask;
+
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
+import com.passta.a2ndproj.data.AppDatabase;
+import com.passta.a2ndproj.data.FilterDAO;
 import com.passta.a2ndproj.data.FilterDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Msg_VO {
@@ -63,7 +68,6 @@ public class Msg_VO {
         calculateTotalMsgPointAndLevel();
     }
 
-
     public void calculateTotalMsgPointAndLevel(){
         if(!isFirstStep){
         FilterDTO filterDTO = mainActivity.filterList.get(0);
@@ -100,6 +104,8 @@ public class Msg_VO {
                 break;
         }
     }
+
+
 
     public double returnWeight(int input){
         switch (input){

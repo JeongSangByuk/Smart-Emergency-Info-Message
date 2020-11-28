@@ -36,8 +36,9 @@ public class Page1Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_page1);
-        setStatusBar();
 
+
+        setStatusBar();
         int networkSatusNum = networkStatus.getConnectivityStatus(getApplicationContext());
         if (networkSatusNum == networkStatus.TYPE_NOT_CONNECTED)
             goToNextActivity(new NetworkActivity());

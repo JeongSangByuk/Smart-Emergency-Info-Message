@@ -48,7 +48,7 @@ public class OneDayMsgRecyclerViewAdapter extends RecyclerView.Adapter<OneDayMsg
         boolean hasSame = false;
         //어댑터의 사이즈가 0일경우 그냥 add
         if (msgRecyclerViewAdapterArrayList.size() == 0) {
-            msgRecyclerViewAdapterArrayList.add(new MsgRecyclerViewAdapter(arrayList.get(position).getMsgArrayList()));
+            msgRecyclerViewAdapterArrayList.add(new MsgRecyclerViewAdapter(arrayList.get(position).getMsgArrayList(),mainActivity));
             holder.recyclerView.setAdapter(msgRecyclerViewAdapterArrayList.get(msgRecyclerViewAdapterArrayList.size() - 1));
         }
         //어댑터의 사이즈가 0이 아닐 경우 if문으로 검사.
@@ -65,7 +65,7 @@ public class OneDayMsgRecyclerViewAdapter extends RecyclerView.Adapter<OneDayMsg
             }
 
             if (!hasSame) {
-                msgRecyclerViewAdapterArrayList.add(new MsgRecyclerViewAdapter(arrayList.get(position).getMsgArrayList()));
+                msgRecyclerViewAdapterArrayList.add(new MsgRecyclerViewAdapter(arrayList.get(position).getMsgArrayList(),mainActivity));
                 holder.recyclerView.setAdapter(msgRecyclerViewAdapterArrayList.get(msgRecyclerViewAdapterArrayList.size() - 1));
             }
         }

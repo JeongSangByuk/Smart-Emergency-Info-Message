@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -26,6 +28,7 @@ public class MsgRecyclerViewAdapter extends RecyclerView.Adapter<MsgRecyclerView
     private LayoutInflater layoutInflater;
     private ArrayList<Msg_VO> arrayList;
     public String adapterId;
+    private MainActivity mainActivity;
 
     public void setArrayList(ArrayList<Msg_VO> arrayList) {
         this.arrayList = arrayList;
@@ -35,8 +38,9 @@ public class MsgRecyclerViewAdapter extends RecyclerView.Adapter<MsgRecyclerView
         return arrayList;
     }
 
-    public MsgRecyclerViewAdapter(ArrayList<Msg_VO> arrayList) {
+    public MsgRecyclerViewAdapter(ArrayList<Msg_VO> arrayList, MainActivity mainActivity) {
         this.arrayList = arrayList;
+        this.mainActivity = mainActivity;
 
         if(arrayList.size() !=0 )
             this.adapterId = arrayList.get(0).getDay();
@@ -68,6 +72,13 @@ public class MsgRecyclerViewAdapter extends RecyclerView.Adapter<MsgRecyclerView
 
         holder.linearLayout.setAnimation(animation);
         holder.circleImageView.setAnimation(animation);
+
+        holder.parentLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MsgInfoDialog msgInfoDialog = new MsgInfoDialog(context,arrayList.get(position),mainActivity,time.substring(0,time.indexOf("분") + 1),position);
+            }
+        });
     }
 
     @Override
@@ -98,6 +109,7 @@ public class MsgRecyclerViewAdapter extends RecyclerView.Adapter<MsgRecyclerView
     public static class MsgViewHolder extends RecyclerView.ViewHolder {
 
         protected LinearLayout linearLayout;
+        protected LinearLayout parentLinearLayout;
         protected TextView msgText;
         protected TextView senderLocation;
         protected TextView time;
@@ -105,12 +117,15 @@ public class MsgRecyclerViewAdapter extends RecyclerView.Adapter<MsgRecyclerView
 
         public MsgViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.parentLinearLayout = (LinearLayout) itemView.findViewById(R.id.parent_layout_item_msg_list);
             this.linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_item_msg_list);
-
             this.msgText = (TextView) itemView.findViewById(R.id.msg_item_msg_list);
             this.senderLocation = (TextView) itemView.findViewById(R.id.sender_locattion_item_msg_list);
             this.time = (TextView) itemView.findViewById(R.id.time_item_msg_list);
             this.circleImageView = (ImageView) itemView.findViewById(R.id.color_item_msg_list);
+
+
+
 
         }
     }

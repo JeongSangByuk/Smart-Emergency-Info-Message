@@ -186,7 +186,6 @@ public class Page2Activity extends AppCompatActivity implements View.OnClickList
 //
 //            }
 
-
             return null;
         }
 

@@ -7,14 +7,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
@@ -22,25 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.passta.a2ndproj.MainActivity;
 import com.passta.a2ndproj.R;
+
 import com.passta.a2ndproj.data.UserListDAO;
 import com.passta.a2ndproj.data.UserListDTO;
-import com.passta.a2ndproj.network.RetrofitClient;
-import com.passta.a2ndproj.network.ServiceApi;
 import com.passta.a2ndproj.start.dialogue.Dialogue_add_location;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUpRecyclerViewAdapter.HashtagUpRecyclerViewHolder> {
 
@@ -107,8 +91,6 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                 @SuppressLint({"ResourceAsColor", "ResourceType"})
                 @Override
                 public void onClick(View view) {
-
-                     //추가하기 눌럿을경우
                     if (getAdapterPosition() == 0) {
                         Intent intent = new Intent(mainActivity.getApplicationContext(), Dialogue_add_location.class);
                         intent.putExtra("type", "main");
@@ -132,8 +114,10 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                         }
 
                         deleteLocationMsgItem(hashtagText,hashtagLocation,getAdapterPosition());
+
                         //꺼주기(글자색 바꾸기)
-                        Typeface typeface = itemView.getContext().getResources().getFont(R.font.nanumsquarer);
+
+                        Typeface typeface = ResourcesCompat.getFont(context, R.font.nanumsquarer);
                         name.setTextColor(Color.parseColor(itemView.getContext().getString(R.color.black)));
                         name.setTypeface(typeface);
                     }
@@ -142,7 +126,8 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                     // 클릭 안돼져있는 경우우
                     else {
                         addLocationItem(hashtagText,getAdapterPosition());
-                        Typeface typeface = itemView.getContext().getResources().getFont(R.font.nanumsquareeb);
+
+                        Typeface typeface = ResourcesCompat.getFont(context, R.font.nanumsquareeb);
                         name.setTextColor(Color.parseColor(itemView.getContext().getString(R.color.twitterBlue)));
                         name.setTypeface(typeface);
                     }
@@ -154,7 +139,7 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                 @Override
                 public boolean onLongClick(View view) {
                     if (getAdapterPosition() != 0) {
-                        CheckDeleteLocation checkDeleteLocation = new CheckDeleteLocation(mainActivity, getAdapterPosition());
+                        CheckDeleteLocationDialog checkDeleteLocationDialog = new CheckDeleteLocationDialog(mainActivity, getAdapterPosition());
                     }
 
                     return true;
@@ -191,7 +176,7 @@ public class HashtagUpRecyclerViewAdapter extends RecyclerView.Adapter<HashtagUp
                 if (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().get(j).getSenderLocation().equals(location) ||
                         (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().get(j).getSenderLocation().split(" ")[0].equals(
                                 location.split(" ")[0]) && (mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().
-                                        get(j).getSenderLocation().split(" ")[1].equals("전체"))
+                                get(j).getSenderLocation().split(" ")[1].equals("전체"))
                         )) {
                     mainActivity.oneDayMsgDataList.get(i).getMsgArrayList().remove(j);
                     j--;
