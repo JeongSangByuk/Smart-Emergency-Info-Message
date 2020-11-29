@@ -127,7 +127,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
         seekbar5_progress = Math.abs(seekbar5.getProgress() - 5);
 
         new DatabaseAsyncTask(db.filterDAO()).execute();
-
+        insertMsgData("중대본", "전체",0);
         for (int i = 0; i < userList.size(); i++) {
             insertMsgData(userList.get(i).getLocation_si(), userList.get(i).getLocation_gu(),i);
         }
@@ -157,7 +157,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
 
                 try {
                     result = response.body().string();
-                    Log.d("test",result);
+
                     int temp = 0;
                     boolean hasSameLocation_si = false;
 
@@ -184,7 +184,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
 
                         // 이미 똑같은 ~~시 문자가 저장돼있는경우 ~~시 전체의 문자의 경우는 continue 시켜서 add안함.
                         if (hasSameLocation_si) {
-                            if (obj.getString("msg_sendingArea").split(" ")[1].equals("전체"))
+                            if (obj.getString("msg_gusi").equals("전체"))
                                 continue;
                         }
 
@@ -192,7 +192,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
                         if (isTotalGu) {
                             LoopC:
                             for (int j = 0; j < position; j++) {
-                                if (obj.getString("msg_sendingArea").split(" ")[1].equals(userList.get(j).getLocation_gu())) {
+                                if (obj.getString("msg_gusi").equals(userList.get(j).getLocation_gu())) {
                                     continue LoopP;
                                 }
                             }
@@ -200,7 +200,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
 
                         //같은 시의 전체 가 이미 저장돼있고, 같은 시가 들어올 경우 continue * -1 인 이유는 가장 최근에 등록된게 ~~시 전체인 경우를 제외하기 위함.
                         for (int j = 0; j < position; j++) {
-                            if (obj.getString("msg_sendingArea").split(" ")[0].equals(userList.get(j).getLocation_si())&&
+                            if (obj.getString("msg_sido").equals(userList.get(j).getLocation_si())&&
                                     userList.get(j).getLocation_gu().equals("전체")) {
                                 continue LoopP;
                             }
@@ -208,7 +208,7 @@ public class Page3Activity extends AppCompatActivity implements View.OnClickList
 
                         //msgVo 하나만들고
                         Msg_VO tempMsgVO = new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content").trim(),
-                                obj.getString("msg_sendingArea"), new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
+                                obj.getString("msg_sido") + " " + obj.getString("msg_gusi"), new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance")), seekbar1_progress, seekbar2_progress, seekbar3_progress, seekbar4_progress, seekbar5_progress);
 
                         //데베에 저장

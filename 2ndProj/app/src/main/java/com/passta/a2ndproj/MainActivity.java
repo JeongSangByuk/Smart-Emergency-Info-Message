@@ -121,6 +121,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //이미 등록된 경우
+        @SuppressLint("WrongThread") String savedToken = FirebaseInstanceId.getInstance().getId();
+        Log.e("savedToken", savedToken);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            if(extras.containsKey("noti")){
+                boolean noti = extras.getBoolean("noti");
+                if(noti)
+                {
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            }
+        }
+
         //db생성
         db = AppDatabase.getInstance(this);
 
@@ -135,12 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        //이미 등록된 경우
-        @SuppressLint("WrongThread") String savedToken = FirebaseInstanceId.getInstance().getId();
-        Log.e("savedToken", savedToken);
-
         new FilterDatabaseAsyncTask(db.filterDAO()).execute();
-
     }
 
     public void subcribeTopic(String topic) {
@@ -259,6 +272,13 @@ public class MainActivity extends AppCompatActivity {
 
         LoopP:
         for (int i = 0; i < msgDataList.size(); i++) {
+
+            //중대본 무조건 추가
+            if(msgDataList.get(i).getSenderLocation().trim().equals("중대본 전체")){
+                classifiedMsgDataList.add(msgDataList.get(i));
+                continue LoopP;
+            }
+
             if (!hashtagDownDataList.get(msgDataList.get(i).getCategroyIndex()).isClicked())
                 continue;
             if (!hashtagDownDataList.get(msgDataList.get(i).getLevel() + 4).isClicked())
@@ -474,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // 이미 똑같은 ~~시 문자가 저장돼있는경우 ~~시 전체의 문자의 경우는 continue 시켜서 add안함.
                         if (hasSameLocation_si) {
-                            if (obj.getString("msg_sendingArea").split(" ")[1].equals("전체"))
+                            if (obj.getString("msg_gusi").equals("전체"))
                                 continue;
                         }
 
@@ -482,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isTotalGu) {
                             LoopC:
                             for (int j = 0; j < userList.size() - 1; j++) {
-                                if (obj.getString("msg_sendingArea").split(" ")[1].equals(userList.get(j).getLocation_gu())) {
+                                if (obj.getString("msg_gusi").equals(userList.get(j).getLocation_gu())) {
                                     continue LoopP;
                                 }
                             }
@@ -490,14 +510,14 @@ public class MainActivity extends AppCompatActivity {
 
                         //같은 시의 전체 가 이미 저장돼있고, 같은 시가 들어올 경우 continue * -1 인 이유는 가장 최근에 등록된게 ~~시 전체인 경우를 제외하기 위함.
                         for (int j = 0; j < userList.size()-1; j++) {
-                            if (obj.getString("msg_sendingArea").split(" ")[0].equals(userList.get(j).getLocation_si())&&
+                            if (obj.getString("msg_sido").equals(userList.get(j).getLocation_si())&&
                                     userList.get(j).getLocation_gu().equals("전체")) {
                                 continue LoopP;
                             }
                         }
 
                         msgDataList.add(new Msg_VO(obj.getInt("msg_id"), tempDay.get(0), tempDay.get(1), obj.getString("msg_content").trim(),
-                                obj.getString("msg_sendingArea"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
+                                obj.getString("msg_sido") + " " + obj.getString("msg_gusi"), MainActivity.this, new MsgCategoryPoint_VO(obj.getDouble("co_route"), obj.getDouble("co_outbreak_quarantine"), obj.getDouble("co_safetyTips"),
                                 obj.getDouble("disaster_weather"), obj.getDouble("economy_finance"))));
 
                         Msg_VO tempMsgVO = msgDataList.get(msgDataList.size() - 1);
