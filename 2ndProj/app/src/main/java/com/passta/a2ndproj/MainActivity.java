@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         hashtagUpDataList = new ArrayList<>();
 
         hashtagUpDataList.add(new Hashtag_VO("내 장소\n추가하기", R.drawable.plus2, false));
-        hashtagUpDataList.add(new Hashtag_VO("내 국민\n은행 계좌", R.drawable.bank_kb_gray_logo, false));
+        hashtagUpDataList.add(new Hashtag_VO("내 계좌", R.drawable.bank_kb_gray_logo, false));
 
         for (int i = 0; i < userList.size(); i++) {
             hashtagUpDataList.add(new Hashtag_VO(userList.get(i).tag, userList.get(i).img_number, userList.get(i).isHashtagChecked, userList.get(i).getLocation_si() + " " + userList.get(i).getLocation_gu()));
