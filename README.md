@@ -59,11 +59,15 @@
 ### 서비스 구성도
 <p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046588-98e47cb9-a36b-40d2-9ee7-deae588e89a5.png"> </p>
 
+1. 재난문자의 카테고리를 ‘(코로나) 동선, (코로나) 발생/방역, (코로나) 안전수칙, 재난/날씨, 경제, 금융’ 로 5종류의 카테고리로 확립하였습니다.
+2. 재난문자 카테고리 분류를 하기위해 Skcit Learn의 TF/IDF 기법을 이용한 Pretrained Model을 도입했으며,<br> LSTM 모델에 Pretrained Model을 Embedding하고 feature를 연속해서 통합하는 방식을 이용했습니다.
+3. Level을 도출하기 위해 가중치 부여 알고리즘을 채택했다. 우선 사용자가 높게 설정한 카테고리와 사용자 위치 연관성이 높은 재난문자에 가중치를 부여합니다.
+
+
 ## 🎓 I Learned
 
 ## 🔍 More
 <p align="center"> <a href="https://www.youtube.com/watch?v=tpk337-h3ZE"><img src="https://user-images.githubusercontent.com/64072741/126046383-4420ad00-a2f4-48da-a94c-6f15f75e5490.png"/></a> </p>
-
 
 
 
