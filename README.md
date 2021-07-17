@@ -15,7 +15,7 @@
 기존의 송출 기지국 반경 15km까지 발송되는 시스템은 사용자 개인과 연관성이 떨어지는 문자가 올 가능성이 높습니다. ‘Smart 재난문자’는 수신 지역 추가 또는 마이데이터 분석을 통해 재난문자발송 지역을 특정, 더 정확한 재난문자를 수신할 수 있습니다.
 ### 2. 카테고리 선호도 기반 재난문자
 재난문자 발생 즉시, 재난 문자 분석 AI를 통해 5가지 유형으로 분류되어 사용자에게 송출됩니다. 사용자는 푸시알림을 통해 이를 확인하여 수신 즉시 자신에게 유용성을 판단 할 수 있습니다.
-### 3. 사용자 맞춤 알림 서비
+### 3. 사용자 맞춤 알림 서비스
 사용자는 분류된 문자 유형에 따라 레벨을 조절할 수 있습니다. 이 레벨에 따라 정부에서 문자 발송 시 푸시알림 여부, 소리/진동 등을 상세히 조절할 수 있어 사용자에게 더 필요한 재난문자를 맞춤으로 제공합니다.
 ### 4. 한눈에 보는 코로나 정보
 재난문자로 지역감염을 알게 되어도 지역홈페이지를 따로 검색해야했던 불편함을 해소하기 위해 재난문자 터치 시 바로 지자체·정부 사이트로 이동 기능, 일일 코로나 현황판 등 사용자 편의성을 높이는 기능을 완성도 있게 제공합니다.<br><br>
@@ -32,16 +32,16 @@
 
 ##  🖥️  Preview
 ### 1. 위치 기반 사용자 맞춤 재난문자.
-<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046010-25df2891-269c-4ee7-ab9e-7ddfb7e05994.png"> </p>
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126047408-32e4b4af-56b8-49bb-98ce-5e1895712708.png"> </p>
 
 ### 2. 카테고리 선호도 기반 재난문자 알림.
-<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126045996-db388023-0e04-493c-83e5-2698c36f6a09.png"> </p>
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126047436-9aa2613c-5612-470c-97f4-37d54c685149.png"> </p>
 
 ### 3. 사용자 맞춤 알림 서비스.
-<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046075-cab43414-d2f2-456c-8fde-058e6f96efc5.png"> </p>
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126047303-fda72996-2e06-40c8-a8c6-a63b2dd36d53.png"> </p>
 
 ### 4. 한눈에 보는 코로나 정보.
-<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046079-340c8651-cdbf-496e-8de8-dae4565a299d.png"> </p><br>
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126047412-99bac4b3-ba8b-4190-bbf7-3cae33df8c54.png"> </p><br>
 
 ##  🛠️  Architecture
 
