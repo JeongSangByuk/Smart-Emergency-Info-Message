@@ -56,4 +56,4 @@
 ## 🎓 I Learned
 
 ## 🔍 More
-[![Video Label](https://user-images.githubusercontent.com/64072741/126046383-4420ad00-a2f4-48da-a94c-6f15f75e5490.png)](https://www.youtube.com/watch?v=tpk337-h3ZE)
+<a href="https://www.youtube.com/watch?v=tpk337-h3ZE"><img src="https://user-images.githubusercontent.com/64072741/126046383-4420ad00-a2f4-48da-a94c-6f15f75e5490.png"/></a>
