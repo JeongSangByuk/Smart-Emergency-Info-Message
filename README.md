@@ -51,6 +51,8 @@
 4. 데이터들은 Paas-ta의 node.js 서버에 바인딩 된 MySQL 서비스를 통해 저장되고 사용자에게 전송됩니다.
 5. Paas-ta 어플리케이션과 서비스를 CLOUD FOUNDERY를 통해 MySQL에 접속하고 소스코드를 푸시하는 등 관리·개발 하였습니다.
 6. 재난문자를 가져오고 분석하여 분류하는 머신러닝기술 활용을 위해 AWS서버에 Tensor Flow와 Scikit Learn을 이용한 Machine Learning Model을 올렸습니다.
-7. 위 과정을 통해 정제된 재난문자는 MySQL DB에 저장됨과 동시에  Firebase FCM 기술을 활용해 알맞은 사용자에게 푸시 알림을 전송하였습니다.
+7. 위 과정을 통해 정제된 재난문자는 MySQL DB에 저장됨과 동시에  Firebase FCM 기술을 활용해 알맞은 사용자에게 푸시 알림을 전송하였습니다.<br>
 
+## 🎓 I Learned
 
+[![Video Label](./Image/youtube_img.png)](https://www.youtube.com/watch?v=tpk337-h3ZE)
