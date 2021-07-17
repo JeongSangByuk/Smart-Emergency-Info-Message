@@ -31,4 +31,17 @@
 + Room : 안드로이드 로컬 DB 사용.<br><br>
 
 ##  🖥️  Preview
+### 1. 위치 기반 사용자 맞춤 재난문자.
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046010-25df2891-269c-4ee7-ab9e-7ddfb7e05994.png"> </p>
+
+### 2. 카테고리 선호도 기반 재난문자 알림.
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126045996-db388023-0e04-493c-83e5-2698c36f6a09.png"> </p>
+
+### 3. 사용자 맞춤 알림 서비스.
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046075-cab43414-d2f2-456c-8fde-058e6f96efc5.png"> </p>
+
+### 4. 한눈에 보는 코로나 정보.
+<p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046079-340c8651-cdbf-496e-8de8-dae4565a299d.png"> </p><br>
+
+
 
