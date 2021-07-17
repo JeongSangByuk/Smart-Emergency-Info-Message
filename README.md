@@ -60,11 +60,15 @@
 <p align="center"> <img src = "https://user-images.githubusercontent.com/64072741/126046588-98e47cb9-a36b-40d2-9ee7-deae588e89a5.png"> </p>
 
 1. 재난문자의 카테고리를 ‘(코로나) 동선, (코로나) 발생/방역, (코로나) 안전수칙, 재난/날씨, 경제, 금융’ 로 5종류의 카테고리로 확립하였습니다.
-2. 재난문자 카테고리 분류를 하기위해 Skcit Learn의 TF/IDF 기법을 이용한 Pretrained Model을 도입했으며,<br> LSTM 모델에 Pretrained Model을 Embedding하고 feature를 연속해서 통합하는 방식을 이용했습니다.
-3. Level을 도출하기 위해 가중치 부여 알고리즘을 채택했다. 우선 사용자가 높게 설정한 카테고리와 사용자 위치 연관성이 높은 재난문자에 가중치를 부여합니다.
+2. 2020년 12월 1일부터 과거까지 재난문자 데이터 대략 1,000개 정도를 훈련 데이터 셋으로 수집한 후 일일이 분류하여 훈련 데이터셋을 확보했습니다.
+3. 재난문자 카테고리 분류를 하기위해 Skcit Learn의 TF/IDF 기법을 이용한 Pretrained Model을 도입했으며,<br> LSTM 모델에 Pretrained Model을 Embedding하고 feature를 연속해서 통합하는 방식을 이용했습니다.
+4. Level을 도출하기 위해 가중치 부여 알고리즘을 채택했습니다. 사용자가 높게 설정한 카테고리와 사용자 위치 연관성이 높은 재난문자에 가중치를 부여합니다. 
+5. 사용자가 설정을 수정하는 즉시 관리되고 있는 모든 재난문자의 Level이 재할당되며, 사용자 UI도 이에 맞게 업데이트됩니다.<br>
 
 
 ## 🎓 I Learned
++ 처음으로 접한 NLP 머신 러닝 개발이었습니다. 물론 머신 러닝에 대해 완벽한 이해를 하지 못하였고 다소 어려웠음에도 결과가 매우 만족스럽게 나와서 매우 뿌듯했습니다. 머신 러닝 시스템의 프로세스를 경험해볼 수 있는 좋은 기회였던 것 같습니다.
++ 재난문자가 관리되는 주요 뷰의 전반적인 UI/UX를 설계했습니다. 그 과정에서 슬라이딩업패널을 커스텀마이징해서 사용하게 됐는데, 
 
 ## 🔍 More
 <p align="center"> <a href="https://www.youtube.com/watch?v=tpk337-h3ZE"><img src="https://user-images.githubusercontent.com/64072741/126046383-4420ad00-a2f4-48da-a94c-6f15f75e5490.png"/></a> </p>
